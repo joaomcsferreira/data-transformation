@@ -4,7 +4,7 @@ from math import isnan
 
 def csv_to_geojson(csv_file_path, geojson_file_path, lat_col, lon_col):
     # Ler o arquivo CSV
-    df = pd.read_csv(csv_file_path, delimiter=';')  # Adicionando delimitador correto
+    df = pd.read_csv(csv_file_path, delimiter=',')  # Adicionando delimitador correto
     
     # Verificar se as colunas estão presentes no DataFrame
     if lat_col not in df.columns or lon_col not in df.columns:
@@ -42,9 +42,9 @@ def csv_to_geojson(csv_file_path, geojson_file_path, lat_col, lon_col):
         geojson.dump(feature_collection, f, indent=2)
 
 
-csv_file_path = 'csv/Base_Turismo_new.csv' 
-geojson_file_path = 'geojson/Base_Turismo.geojson'
-lat_col = 'LAT'  
-lon_col = 'LON' 
+csv_file_path = 'csv/base_minerios_municipios.csv' 
+geojson_file_path = 'geojson/base_minerios_municipios.geojson'
+lat_col = 'lat'  
+lon_col = 'lon' 
 
 csv_to_geojson(csv_file_path, geojson_file_path, lat_col, lon_col)
