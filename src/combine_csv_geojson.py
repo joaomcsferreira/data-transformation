@@ -11,7 +11,7 @@ def carregar_json(arquivo_json):
 
 # Função para carregar os dados CSV
 def carregar_csv(arquivo_csv):
-    dados_csv = pd.read_csv(arquivo_csv, sep=";", dtype=str)
+    dados_csv = pd.read_csv(arquivo_csv, sep=",", dtype=str)
     return dados_csv
 
 
@@ -28,13 +28,18 @@ def adicionar_info_json(dados_json, dados_csv):
     # Criar um dicionário de mapeamento a partir do CSV
     mapeamento_csv = dados_csv.set_index("Cod").to_dict(orient="index")
 
-    # Iterar sobre as features do JSON e adicionar informações do CSV
+    # Filtrar as features para manter apenas as que têm correspondência no CSV
+    features_filtradas = []
     for feature in dados_json["features"]:
         cd_mun = feature["properties"]["cd_mun"]
         if cd_mun in mapeamento_csv:
             # Adicionar todas as informações do CSV ao JSON
             for chave, valor in mapeamento_csv[cd_mun].items():
                 feature["properties"][chave] = valor.strip()
+            features_filtradas.append(feature)
+
+    # Atualizar a lista de features do JSON com as filtradas
+    dados_json["features"] = features_filtradas
 
     return dados_json
 
@@ -47,8 +52,8 @@ def salvar_json(dados_json, arquivo_json):
 
 # Caminhos dos arquivos
 arquivo_json = "geojson/municipios.json"
-arquivo_csv = "csv/rural.csv"
-arquivo_json_atualizado = "rural.json"
+arquivo_csv = "csv/crianca_alfabetizada.csv"
+arquivo_json_atualizado = "result/crianca_alfabetizada.json"
 
 # Carregar dados
 dados_json = carregar_json(arquivo_json)
